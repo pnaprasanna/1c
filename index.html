@@ -3,58 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>URL Dashboard</title>
+<title>Service Dashboard</title>
 
 <style>
 :root {
-  --bg: #f7f7f7;
-  --card: #ffffff;
-  --text: #222222;
-  --muted: #6b6b6b;
-  --link: #0066cc;
-}
-
-body.dark {
-  --bg: #1b1b1b;
-  --card: #262626;
-  --text: #e6e6e6;
+  --bg: #121212;
+  --card: #1e1e1e;
+  --text: #e0e0e0;
   --muted: #9e9e9e;
-  --link: #4da3ff;
+  --border: #2a2a2a;
 }
 
 body {
   margin: 0;
-  padding: 16px;
+  padding: 14px;
   font-family: Arial, Helvetica, Verdana, sans-serif;
   font-size: 13px;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.4;
 }
 
-.header {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 8px;
-}
-
-.toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.timestamp {
-  text-align: center;
-  font-size: 11px;
-  color: var(--muted);
-  margin-bottom: 14px;
+.search {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 16px auto;
+  display: block;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
 }
 
 .container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 14px;
 }
 
@@ -62,8 +45,15 @@ body {
   background: var(--card);
   border-radius: 10px;
   padding: 14px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  text-decoration: none;
+  color: var(--text);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
   position: relative;
+  border: 1px solid var(--border);
+}
+
+.card:hover {
+  transform: translateY(-2px);
 }
 
 .field {
@@ -80,15 +70,6 @@ body {
   word-break: break-word;
 }
 
-.link {
-  color: var(--link);
-  text-decoration: none;
-}
-
-.link:hover {
-  text-decoration: underline;
-}
-
 .status {
   position: absolute;
   top: 10px;
@@ -96,188 +77,160 @@ body {
   font-size: 16px;
 }
 
-.ok { color: #2e8b57; }
-.fail { color: #cc3333; }
+.ok { color: #3cb371; }
+.fail { color: #e05555; }
+
+.footer {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  <button class="toggle" id="modeBtn">🌙</button>
-</div>
+<input
+  type="text"
+  class="search"
+  placeholder="Search..."
+  id="searchBox"
+/>
 
-<div class="timestamp" id="updated"></div>
-
-<div class="container">
+<div class="container" id="cards">
   
-        <div class="card">
+        <a href="https://docs.python.org" target="_blank" class="card" data-url="https://docs.python.org">
           
-                <div class="field">
-                  <div class="label">Info</div>
-                  <div class="value">Python Docs</div>
-                </div>
-                
-                <div class="field">
-                  <div class="label">URL</div>
-                  <a class="value link" href="https://docs.python.org" target="_blank" rel="noopener">
-                    https://docs.python.org
-                  </a>
-                </div>
-                
-                <div class="field">
-                  <div class="label">Explanation</div>
-                  <div class="value">python,docs</div>
-                </div>
-                
-                <div class="field">
-                  <div class="label">Others</div>
-                  <div class="value">Official Python docs</div>
-                </div>
-                
-          <div class="status" data-url="https://docs.python.org">⏳</div>
-        </div>
+            <div class="field">
+              <div class="label">Info</div>
+              <div class="value">Python Docs</div>
+            </div>
+            
+            <div class="field">
+              <div class="label">Explanation</div>
+              <div class="value">python,docs</div>
+            </div>
+            
+            <div class="field">
+              <div class="label">Others</div>
+              <div class="value">Official Python docs</div>
+            </div>
+            
+          <div class="status">⏳</div>
+        </a>
         
-        <div class="card">
+        <a href="https://github.com" target="_blank" class="card" data-url="https://github.com">
           
-                <div class="field">
-                  <div class="label">Info</div>
-                  <div class="value">Github</div>
-                </div>
-                
-                <div class="field">
-                  <div class="label">URL</div>
-                  <a class="value link" href="https://github.com" target="_blank" rel="noopener">
-                    https://github.com
-                  </a>
-                </div>
-                
-                <div class="field">
-                  <div class="label">Explanation</div>
-                  <div class="value">Projects repository with version control</div>
-                </div>
-                
-                <div class="field">
-                  <div class="label">Others</div>
-                  <div class="value">Official Projects repository for Projects</div>
-                </div>
-                
-          <div class="status" data-url="https://github.com">⏳</div>
-        </div>
+            <div class="field">
+              <div class="label">Info</div>
+              <div class="value">Github</div>
+            </div>
+            
+            <div class="field">
+              <div class="label">Explanation</div>
+              <div class="value">Projects repository with version control</div>
+            </div>
+            
+            <div class="field">
+              <div class="label">Others</div>
+              <div class="value">Official Projects repository for Projects</div>
+            </div>
+            
+          <div class="status">⏳</div>
+        </a>
         
-        <div class="card">
+        <a href="https://vscode.dev/github.com/" target="_blank" class="card" data-url="https://vscode.dev/github.com/">
           
-                <div class="field">
-                  <div class="label">Info</div>
-                  <div class="value">VScode</div>
-                </div>
-                
-                <div class="field">
-                  <div class="label">URL</div>
-                  <a class="value link" href="https://vscode.dev/github.com/" target="_blank" rel="noopener">
-                    https://vscode.dev/github.com/
-                  </a>
-                </div>
-                
-                <div class="field">
-                  <div class="label">Explanation</div>
-                  <div class="value">VScode online Editor</div>
-                </div>
-                
-                <div class="field">
-                  <div class="label">Others</div>
-                  <div class="value">The browser integrated online editor</div>
-                </div>
-                
-          <div class="status" data-url="https://vscode.dev/github.com/">⏳</div>
-        </div>
+            <div class="field">
+              <div class="label">Info</div>
+              <div class="value">VScode</div>
+            </div>
+            
+            <div class="field">
+              <div class="label">Explanation</div>
+              <div class="value">VScode online Editor</div>
+            </div>
+            
+            <div class="field">
+              <div class="label">Others</div>
+              <div class="value">The browser integrated online editor</div>
+            </div>
+            
+          <div class="status">⏳</div>
+        </a>
         
-        <div class="card">
+        <a href="https://copilot.microsoft.com/" target="_blank" class="card" data-url="https://copilot.microsoft.com/">
           
-                <div class="field">
-                  <div class="label">Info</div>
-                  <div class="value">Copilot</div>
-                </div>
-                
-                <div class="field">
-                  <div class="label">URL</div>
-                  <a class="value link" href="https://copilot.microsoft.com/" target="_blank" rel="noopener">
-                    https://copilot.microsoft.com/
-                  </a>
-                </div>
-                
-                <div class="field">
-                  <div class="label">Explanation</div>
-                  <div class="value">Copilot</div>
-                </div>
-                
-                <div class="field">
-                  <div class="label">Others</div>
-                  <div class="value">Copilot - Microsoft AI agent</div>
-                </div>
-                
-          <div class="status" data-url="https://copilot.microsoft.com/">⏳</div>
-        </div>
+            <div class="field">
+              <div class="label">Info</div>
+              <div class="value">Copilot</div>
+            </div>
+            
+            <div class="field">
+              <div class="label">Explanation</div>
+              <div class="value">Copilot</div>
+            </div>
+            
+            <div class="field">
+              <div class="label">Others</div>
+              <div class="value">Copilot - Microsoft AI agent</div>
+            </div>
+            
+          <div class="status">⏳</div>
+        </a>
         
-        <div class="card">
+        <a href="https://search.brave.com/" target="_blank" class="card" data-url="https://search.brave.com/">
           
-                <div class="field">
-                  <div class="label">Info</div>
-                  <div class="value">Brave</div>
-                </div>
-                
-                <div class="field">
-                  <div class="label">URL</div>
-                  <a class="value link" href="https://search.brave.com/" target="_blank" rel="noopener">
-                    https://search.brave.com/
-                  </a>
-                </div>
-                
-                <div class="field">
-                  <div class="label">Explanation</div>
-                  <div class="value">Brave Search</div>
-                </div>
-                
-                <div class="field">
-                  <div class="label">Others</div>
-                  <div class="value">Brave search info with Privacy</div>
-                </div>
-                
-          <div class="status" data-url="https://search.brave.com/">⏳</div>
-        </div>
+            <div class="field">
+              <div class="label">Info</div>
+              <div class="value">Brave</div>
+            </div>
+            
+            <div class="field">
+              <div class="label">Explanation</div>
+              <div class="value">Brave Search</div>
+            </div>
+            
+            <div class="field">
+              <div class="label">Others</div>
+              <div class="value">Brave search info with Privacy</div>
+            </div>
+            
+          <div class="status">⏳</div>
+        </a>
         
 </div>
+
+<div class="footer" id="footer"></div>
 
 <script>
-// Timestamp
-document.getElementById("updated").textContent =
-  "Last updated: " + new Date().toLocaleString();
+// Search
+const searchBox = document.getElementById("searchBox");
+searchBox.addEventListener("keyup", () => {
+  const q = searchBox.value.toLowerCase();
+  document.querySelectorAll(".card").forEach(card => {
+    card.style.display = card.innerText.toLowerCase().includes(q) ? "" : "none";
+  });
+});
 
-// Dark mode toggle
-const body = document.body;
-const btn = document.getElementById("modeBtn");
+// Timestamp + copyright
+document.getElementById("footer").textContent =
+  new Date().toLocaleString() + " © Service Dashboard";
 
-btn.onclick = () => {
-  body.classList.toggle("dark");
-  btn.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
-};
-
-// URL status check
-document.querySelectorAll(".status").forEach(el => {
-  const url = el.dataset.url;
-  if (!url) {
-    el.textContent = "-";
-    return;
-  }
+// Status check
+document.querySelectorAll(".card").forEach(card => {
+  const status = card.querySelector(".status");
+  const url = card.dataset.url;
 
   fetch(url, { method: "HEAD", mode: "no-cors" })
     .then(() => {
-      el.textContent = "✔";
-      el.classList.add("ok");
+      status.textContent = "✔";
+      status.classList.add("ok");
     })
     .catch(() => {
-      el.textContent = "✖";
-      el.classList.add("fail");
+      status.textContent = "✖";
+      status.classList.add("fail");
     });
 });
 </script>
