@@ -15,33 +15,28 @@ def md_to_cards(md_file, html_file):
 
     for row in rows:
         values = [td.get_text(strip=True) for td in row.select("td")]
-        row_data = dict(zip(headers, values))
-        url = row_data.get("URL", "")
+        data = dict(zip(headers, values))
+        url = data.get("URL", "").strip()
+
+        if not url:
+            continue
 
         fields = ""
-        for key, value in row_data.items():
-            if key.lower() == "url":
-                fields += f"""
-                <div class="field">
-                  <div class="label">{key}</div>
-                  <a class="value link" href="{value}" target="_blank" rel="noopener">
-                    {value}
-                  </a>
-                </div>
-                """
-            else:
-                fields += f"""
-                <div class="field">
-                  <div class="label">{key}</div>
-                  <div class="value">{value}</div>
-                </div>
-                """
+        for k, v in data.items():
+            if k.lower() == "url":
+                continue
+            fields += f"""
+            <div class="field">
+              <div class="label">{k}</div>
+              <div class="value">{v}</div>
+            </div>
+            """
 
         cards_html += f"""
-        <div class="card">
+        <a href="{url}" target="_blank" class="card" data-url="{url}">
           {fields}
-          <div class="status" data-url="{url}">⏳</div>
-        </div>
+          <div class="status">⏳</div>
+        </a>
         """
 
     html = f"""<!DOCTYPE html>
@@ -49,58 +44,41 @@ def md_to_cards(md_file, html_file):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>URL Dashboard</title>
+<title>Service Dashboard</title>
 
 <style>
 :root {{
-  --bg: #f7f7f7;
-  --card: #ffffff;
-  --text: #222222;
-  --muted: #6b6b6b;
-  --link: #0066cc;
-}}
-
-body.dark {{
-  --bg: #1b1b1b;
-  --card: #262626;
-  --text: #e6e6e6;
+  --bg: #121212;
+  --card: #1e1e1e;
+  --text: #e0e0e0;
   --muted: #9e9e9e;
-  --link: #4da3ff;
+  --border: #2a2a2a;
 }}
 
 body {{
   margin: 0;
-  padding: 16px;
+  padding: 14px;
   font-family: Arial, Helvetica, Verdana, sans-serif;
   font-size: 13px;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.4;
 }}
 
-.header {{
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 8px;
-}}
-
-.toggle {{
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-}}
-
-.timestamp {{
-  text-align: center;
-  font-size: 11px;
-  color: var(--muted);
-  margin-bottom: 14px;
+.search {{
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 16px auto;
+  display: block;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
 }}
 
 .container {{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 14px;
 }}
 
@@ -108,8 +86,15 @@ body {{
   background: var(--card);
   border-radius: 10px;
   padding: 14px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  text-decoration: none;
+  color: var(--text);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
   position: relative;
+  border: 1px solid var(--border);
+}}
+
+.card:hover {{
+  transform: translateY(-2px);
 }}
 
 .field {{
@@ -126,15 +111,6 @@ body {{
   word-break: break-word;
 }}
 
-.link {{
-  color: var(--link);
-  text-decoration: none;
-}}
-
-.link:hover {{
-  text-decoration: underline;
-}}
-
 .status {{
   position: absolute;
   top: 10px;
@@ -142,53 +118,60 @@ body {{
   font-size: 16px;
 }}
 
-.ok {{ color: #2e8b57; }}
-.fail {{ color: #cc3333; }}
+.ok {{ color: #3cb371; }}
+.fail {{ color: #e05555; }}
+
+.footer {{
+  margin-top: 18px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+}}
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  <button class="toggle" id="modeBtn">🌙</button>
-</div>
+<input
+  type="text"
+  class="search"
+  placeholder="Search..."
+  id="searchBox"
+/>
 
-<div class="timestamp" id="updated"></div>
-
-<div class="container">
+<div class="container" id="cards">
   {cards_html}
 </div>
 
+<div class="footer" id="footer"></div>
+
 <script>
-// Timestamp
-document.getElementById("updated").textContent =
-  "Last updated: " + new Date().toLocaleString();
+// Search
+const searchBox = document.getElementById("searchBox");
+searchBox.addEventListener("keyup", () => {{
+  const q = searchBox.value.toLowerCase();
+  document.querySelectorAll(".card").forEach(card => {{
+    card.style.display = card.innerText.toLowerCase().includes(q) ? "" : "none";
+  }});
+}});
 
-// Dark mode toggle
-const body = document.body;
-const btn = document.getElementById("modeBtn");
+// Timestamp + copyright
+document.getElementById("footer").textContent =
+  new Date().toLocaleString() + " © Service Dashboard";
 
-btn.onclick = () => {{
-  body.classList.toggle("dark");
-  btn.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
-}};
-
-// URL status check
-document.querySelectorAll(".status").forEach(el => {{
-  const url = el.dataset.url;
-  if (!url) {{
-    el.textContent = "-";
-    return;
-  }}
+// Status check
+document.querySelectorAll(".card").forEach(card => {{
+  const status = card.querySelector(".status");
+  const url = card.dataset.url;
 
   fetch(url, {{ method: "HEAD", mode: "no-cors" }})
     .then(() => {{
-      el.textContent = "✔";
-      el.classList.add("ok");
+      status.textContent = "✔";
+      status.classList.add("ok");
     }})
     .catch(() => {{
-      el.textContent = "✖";
-      el.classList.add("fail");
+      status.textContent = "✖";
+      status.classList.add("fail");
     }});
 }});
 </script>
@@ -200,7 +183,7 @@ document.querySelectorAll(".status").forEach(el => {{
     with open(html_file, "w", encoding="utf-8") as f:
         f.write(html)
 
-    print("✅ Responsive index.html generated successfully")
+    print("✅ index.html generated successfully")
 
 
 # Usage
