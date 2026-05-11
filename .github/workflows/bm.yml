@@ -2,7 +2,7 @@ name: Updatation of bm.html
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # Every two hours
+    - cron: '*/30 * * * *' #half an hour
   workflow_dispatch:
 
 permissions:
