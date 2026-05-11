@@ -65,4 +65,4 @@ def md_table_to_html(md_file, html_file):
         f.write(html_page)
 
 # Example usage:
-md_table_to_html("bm.md", "bm.html")
+md_table_to_html("bm.md", "index.html")
