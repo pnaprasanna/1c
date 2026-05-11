@@ -47,7 +47,7 @@ def md_to_cards(md_file, html_file):
 <title>Service Dashboard</title>
 
 <!-- Favicon -->
-<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAMFBMVEUAAAD///8AAABfX1+fn5+Pj4+YmJipqanJycm4uLiLi4vCwsLx8fF79kkpAAAADXRSTlMAEBAgIDAwQEBAUF9w4ZQAAABPSURBVBjTY2CAAUYGBgaGhgZGJmYmRiZWNi4eHiE5OTkFhYWKijYGRk5uDl4+fg4ODR0TEoKKiooKCnqGhoYmJiYGADAD9fAs+n4RS3AAAAAElFTkSuQmCC">
+<link rel="icon" type="image/svg+xml" href="fav.svg">
 
 <style>
 :root {{
