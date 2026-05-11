@@ -17,7 +17,6 @@ def md_table_to_html(md_file, html_file):
   <title>Markdown Table Viewer</title>
 </head>
 <body style="font-family:Arial, sans-serif; margin:20px; background:#f9f9f9;">
-  <h1 style="text-align:center;">Markdown Table Viewer</h1>
   <input type="text" id="searchBox" placeholder="Search..."
          style="display:block; margin:10px auto; padding:8px; width:90%; max-width:400px;
                 border:1px solid #ccc; border-radius:4px;">
