@@ -1,0 +1,47 @@
+name: Add BM Record
+
+on:
+  workflow_dispatch:
+    inputs:
+      info:
+        description: "Info"
+        required: true
+      url:
+        description: "URL (https://...)"
+        required: true
+      explanation:
+        description: "Explanation"
+        required: true
+      tags:
+        description: "Tags"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  add:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Add record
+        run: |
+          python add.py \
+            "${{ inputs.info }}" \
+            "${{ inputs.url }}" \
+            "${{ inputs.explanation }}" \
+            "${{ inputs.tags }}"
+
+      - name: Commit & push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions@github.com"
+          git add bm.md
+          git commit -m "Add BM entry via workflow"
+          git push
