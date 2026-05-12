@@ -1,6 +1,6 @@
 | Info                      | URL                                              | Explanation              | Tags                                                                 |
 |---------------------------|--------------------------------------------------|--------------------------|------------------------------------------------------------------------|
-| Python Docs               | https://docs.python.org                          |Official Python docs               |     Python,docs                                             |
+| Python Docs               | https://docs.python.org                          |Official Python docs               |     Python, docs                                             |
 | Github | https://github.com | Projects repository with version control | Projects,Repository, Version controls |
 | VScode | https://vscode.dev/github.com/ |The browser integrated online editor | VScode online Editor |
 | Copilot | https://copilot.microsoft.com/ | Copilot - Microsoft AI agent | Copilot, AI Agent |
