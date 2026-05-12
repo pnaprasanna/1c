@@ -31,8 +31,13 @@ jobs:
           python-version: '3.x'
 
       - name: Add record
+        env:
+          INFO: ${{ inputs.info }}
+          URL: ${{ inputs.url }}
+          EXPLANATION: ${{ inputs.explanation }}
+          TAGS: ${{ inputs.tags }
         run: |
-          python add.py "${{ inputs.info }}" "${{ inputs.url }}" "${{ inputs.explanation }}" "${{ inputs.tags }}
+          python add.py
 
       - name: Commit & push
         run: |
