@@ -1,7 +1,7 @@
-| Info                      | URL                                              | Explanation              | Others                                                                 |
+| Info                      | URL                                              | Explanation              | Tags                                                                 |
 |---------------------------|--------------------------------------------------|--------------------------|------------------------------------------------------------------------|
-| Python Docs               | https://docs.python.org                          | python,docs              | Official Python docs                                                   |
-| Github | https://github.com | Projects repository with version control | Official Projects repository for Projects |
-| VScode | https://vscode.dev/github.com/ | VScode online Editor | The browser integrated online editor |
-| Copilot | https://copilot.microsoft.com/ | Copilot | Copilot - Microsoft AI agent |
-| Brave | https://search.brave.com/ | Brave Search | Brave search info with Privacy |
+| Python Docs               | https://docs.python.org                          |Official Python docs               |     Python,docs                                             |
+| Github | https://github.com | Projects repository with version control | Projects,Repository, Version controls |
+| VScode | https://vscode.dev/github.com/ |The browser integrated online editor | VScode online Editor |
+| Copilot | https://copilot.microsoft.com/ | Copilot - Microsoft AI agent | Copilot, AI Agent |
+| Brave | https://search.brave.com/ | Brave Search | Search, Privacy |
