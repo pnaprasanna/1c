@@ -39,7 +39,7 @@ def md_to_cards(md_file, html_file):
         </a>
         """
 
-    html = f"""<!DOCTYPE html>
+    html_template = """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -47,7 +47,7 @@ def md_to_cards(md_file, html_file):
 <title>Service Dashboard</title>
 
 <style>
-:root {{
+:root {
   --bg: #121212;
   --card: #1e1e1e;
   --text: #e0e0e0;
@@ -55,18 +55,18 @@ def md_to_cards(md_file, html_file):
   --border: #2a2a2a;
   --ok: #3cb371;
   --fail: #e05555;
-}}
+}
 
-body {{
+body {
   margin: 0;
   padding: 14px;
   font-family: Arial, Helvetica, Verdana, sans-serif;
   font-size: 13px;
   background: var(--bg);
   color: var(--text);
-}}
+}
 
-.search {{
+.search {
   width: 100%;
   max-width: 420px;
   margin: 0 auto 16px auto;
@@ -76,15 +76,15 @@ body {{
   border: 1px solid var(--border);
   background: var(--card);
   color: var(--text);
-}}
+}
 
-.container {{
+.container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 14px;
-}}
+}
 
-.card {{
+.card {
   background: var(--card);
   border-radius: 10px;
   padding: 14px;
@@ -93,106 +93,94 @@ body {{
   box-shadow: 0 3px 8px rgba(0,0,0,0.25);
   position: relative;
   border: 1px solid var(--border);
-}}
+}
 
-.card:hover {{
+.card:hover {
   transform: translateY(-2px);
-}}
+}
 
-.field {{
+.field {
   margin-bottom: 8px;
-}}
+}
 
-.label {{
+.label {
   font-size: 11px;
   color: var(--muted);
-}}
+}
 
-.value {{
+.value {
   font-weight: 600;
   word-break: break-word;
-}}
+}
 
-.status {{
+.status {
   position: absolute;
   top: 10px;
   right: 12px;
   font-size: 16px;
-}}
+}
 
-.ok {{ color: var(--ok); }}
-.fail {{ color: var(--fail); }}
+.ok { color: var(--ok); }
+.fail { color: var(--fail); }
 
-.footer {{
+.footer {
   margin-top: 18px;
   text-align: center;
   font-size: 11px;
   color: var(--muted);
-}}
+}
 </style>
 </head>
 
 <body>
 
-<input
-  type="text"
-  class="search"
-  placeholder="Search..."
-  id="searchBox"
-/>
+<input type="text" class="search" placeholder="Search..." id="searchBox">
 
 <div class="container" id="cards">
-  {cards_html}
+__CARDS__
 </div>
 
 <div class="footer" id="footer"></div>
 
 <script>
-const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+const REFRESH_INTERVAL = 5 * 60 * 1000;
 
-/* Search */
 const searchBox = document.getElementById("searchBox");
-searchBox.addEventListener("keyup", () => {{
+searchBox.addEventListener("keyup", () => {
   const q = searchBox.value.toLowerCase();
-  document.querySelectorAll(".card").forEach(card => {{
+  document.querySelectorAll(".card").forEach(card => {
     card.style.display = card.innerText.toLowerCase().includes(q) ? "" : "none";
-  }});
-}});
+  });
+});
 
-/* Timestamp + copyright */
-function updateFooter() {{
+function updateFooter() {
   document.getElementById("footer").textContent =
     new Date().toLocaleString() + " © Service Dashboard";
-}}
-updateFooter();
+}
 
-/* URL status check */
-function checkStatuses() {{
-  document.querySelectorAll(".card").forEach(card => {{
+function checkStatuses() {
+  document.querySelectorAll(".card").forEach(card => {
     const status = card.querySelector(".status");
     const url = card.dataset.url;
 
     status.textContent = "⏳";
     status.className = "status";
 
-    fetch(url, {{ method: "HEAD", mode: "no-cors" }})
-      .then(() => {{
+    fetch(url, { method: "HEAD", mode: "no-cors" })
+      .then(() => {
         status.textContent = "✔";
         status.classList.add("ok");
-      }})
-      .catch(() => {{
+      })
+      .catch(() => {
         status.textContent = "✖";
         status.classList.add("fail");
-      }});
-  }});
+      });
+  });
 
   updateFooter();
 }
 
-/* Initial check */
 checkStatuses();
-
-/* Auto-refresh (no page reload) */
 setInterval(checkStatuses, REFRESH_INTERVAL);
 </script>
 
@@ -200,10 +188,12 @@ setInterval(checkStatuses, REFRESH_INTERVAL);
 </html>
 """
 
-    with open(html_file, "w", encoding="utf-8") as f:
-        f.write(html)
+    html_final = html_template.replace("__CARDS__", cards_html)
 
-    print("✅ index.html generated successfully with JS auto-refresh")
+    with open(html_file, "w", encoding="utf-8") as f:
+        f.write(html_final)
+
+    print("✅ index.html generated successfully")
 
 
 # Usage
