@@ -7,3 +7,4 @@
 | Brave | https://search.brave.com/ | Brave Search | Search, Privacy |
 | Gemini |https://gemini.google.com/app| Gemini chat | Gemini, AI, Chatbot|
 | Aitmpl |https://www.aitmpl.com/| AI tools | AI, Chatbot, Tools|
+|Cobalt |https://cobalt.tools/|Download videos from Internet| Online Downloder, Video Downloder|
