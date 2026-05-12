@@ -2,7 +2,7 @@ name: Build Static Page
 
 on:
   schedule:
-    - cron: '*/30 * * * *'   # Every 30 minutes
+    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -27,6 +27,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Generate index.html
+        env:
+          DASH_PASSWORD: ${{ secrets.DASH_PASSWORD }}
         run: |
           python bm.py
 
