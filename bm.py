@@ -1,6 +1,5 @@
 import os
-import hashlib
-import markdown
+import markdownimport hashlib
 from bs4 import BeautifulSoup
 
 def md_to_cards(md_file, html_file):
@@ -30,30 +29,31 @@ def md_to_cards(md_file, html_file):
             continue
 
         fields_html = ""
-
         first = True
+
         for k, v in data.items():
             if k.lower() == "url":
                 continue
 
-            # ✅ Add tick next to first field only
             tick_html = ""
+            copy_html = ""
+
             if first:
                 tick_html = '<span class="status status-inline">⏳</span>'
+                copy_html = f'<span class="copy-btn" onclick="copyUrl(event, \\"{url}\\")">⧉</span>'
                 first = False
 
             fields_html += f"""
             <div class="field">
               <div class="label">{k}</div>
               <div class="value">
-                {v} {tick_html}
+                {v} {tick_html} {copy_html}
               </div>
             </div>
             """
 
-        # ✅ URL stored as tooltip ONLY
         cards_html += f"""
-<a class="card" href="{url}" title="{url}" target="_blank" data-url="{url}">
+<a class="card" href="{url}" target="_blank" data-url="{url}" title="{url}">
   {fields_html}
 </a>
 """
@@ -62,9 +62,9 @@ def md_to_cards(md_file, html_file):
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="fav.svg">
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js
 <title>Service Dashboard</title>
 
 <style>
@@ -124,7 +124,6 @@ body.light {
   gap: 12px;
 }
 
-/* ✅ Compact card */
 .card {
   background: var(--card);
   border-radius: 10px;
@@ -135,7 +134,6 @@ body.light {
   transition: transform 0.2s ease;
 }
 
-/* Hover glow */
 @keyframes neonPulse {
   0%,100% { box-shadow: 0 0 10px rgba(0,255,200,0.15); }
   50% { box-shadow: 0 0 25px rgba(0,255,200,0.35); }
@@ -150,19 +148,33 @@ body.light {
 .label { font-size: 10px; color: var(--muted); }
 .value { font-weight: 600; }
 
-/* ✅ GitHub style badge */
-.status-inline {
+/* ✅ STATUS */
+.status-inline,
+.copy-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 15px;
   height: 15px;
-  margin-left: 6px;
   font-size: 10px;
   border-radius: 50%;
+  margin-left: 6px;
 }
 
-/* Tick animation */
+/* ✅ Copy button hidden until hover */
+.copy-btn {
+  background: #444;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+
+.card:hover .copy-btn {
+  opacity: 1;
+}
+
+/* ✅ Tick */
 @keyframes tickPop {
   0% { transform: scale(0.5); opacity: 0; }
   60% { transform: scale(1.2); opacity: 1; }
@@ -180,7 +192,6 @@ body.light {
   color: #fff;
 }
 
-/* Footer minimal */
 .footer {
   margin-top: 16px;
   text-align: center;
@@ -241,6 +252,14 @@ __CARDS__
 
 const PASSWORD_HASH="__PASSWORD_HASH__";
 
+/* Copy URL */
+function copyUrl(e, url){
+  e.preventDefault();
+  e.stopPropagation();
+  navigator.clipboard.writeText(url);
+}
+
+/* SHA */
 async function sha256(t){
  const d=new TextEncoder().encode(t);
  const h=await crypto.subtle.digest("SHA-256",d);
@@ -312,7 +331,7 @@ function exportToExcel(){
  XLSX.writeFile(wb,"dashboard.xlsx");
 }
 
-/* Inactivity lock */
+/* Inactivity */
 let t; const LIMIT=300000;
 
 function resetTimer(){
