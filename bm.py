@@ -225,28 +225,25 @@ body.light {
   width: 200px;
 }
 
-
-/* Sidebar (push layout style) */
 .sidebar {
   width: 0;
   overflow: hidden;
+  transition: width 0.25s ease;
   background: var(--card);
   border-right: 1px solid var(--border);
-  transition: width 0.25s ease;
-  height: 100vh;
-  padding: 0;
 }
 
-/* Open state */
 .sidebar.active {
   width: 220px;
   padding: 16px;
 }
 
-/* Content wrapper shifts automatically */
 #appWrapper {
   flex: 1;
-  transition: margin 0.25s ease;
+}
+
+#layout {
+  display: flex;
 }
 
 /* Links */
@@ -268,7 +265,9 @@ body.light {
 </head>
 
 <body>
+<div id="layout">
 
+<div id="sidebar"></div>
 <div id="appWrapper">
 
 <span class="menu-btn" onclick="toggleMenu()">☰</span>
@@ -415,6 +414,8 @@ function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
 }
 </script>
+
+</div>
 
 </div>
 </body>
