@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="fav.svg">
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js
 <title>Service Dashboard</title>
 
 <style>
@@ -64,7 +64,6 @@ body.light {
   gap: 12px;
 }
 
-/* ✅ Compact card */
 .card {
   background: var(--card);
   border-radius: 10px;
@@ -75,7 +74,6 @@ body.light {
   transition: transform 0.2s ease;
 }
 
-/* Hover glow */
 @keyframes neonPulse {
   0%,100% { box-shadow: 0 0 10px rgba(0,255,200,0.15); }
   50% { box-shadow: 0 0 25px rgba(0,255,200,0.35); }
@@ -90,19 +88,33 @@ body.light {
 .label { font-size: 10px; color: var(--muted); }
 .value { font-weight: 600; }
 
-/* ✅ GitHub style badge */
-.status-inline {
+/* ✅ STATUS */
+.status-inline,
+.copy-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 15px;
   height: 15px;
-  margin-left: 6px;
   font-size: 10px;
   border-radius: 50%;
+  margin-left: 6px;
 }
 
-/* Tick animation */
+/* ✅ Copy button hidden until hover */
+.copy-btn {
+  background: #444;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+
+.card:hover .copy-btn {
+  opacity: 1;
+}
+
+/* ✅ Tick */
 @keyframes tickPop {
   0% { transform: scale(0.5); opacity: 0; }
   60% { transform: scale(1.2); opacity: 1; }
@@ -120,7 +132,6 @@ body.light {
   color: #fff;
 }
 
-/* Footer minimal */
 .footer {
   margin-top: 16px;
   text-align: center;
@@ -169,251 +180,251 @@ body.light {
 
 <div class="container">
 
-<a class="card" href="https://docs.python.org" title="https://docs.python.org" target="_blank" data-url="https://docs.python.org">
+<a class="card" href="https://docs.python.org" target="_blank" data-url="https://docs.python.org" title="https://docs.python.org">
   
             <div class="field">
               <div class="label">Info</div>
               <div class="value">
-                Python Docs <span class="status status-inline">⏳</span>
+                Python Docs <span class="status status-inline">⏳</span> <span class="copy-btn" onclick="copyUrl(event, \"https://docs.python.org\")">⧉</span>
               </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
               <div class="value">
-                Official Python docs 
+                Official Python docs  
               </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
               <div class="value">
-                Python, docs 
+                Python, docs  
               </div>
             </div>
             
 </a>
 
-<a class="card" href="https://github.com" title="https://github.com" target="_blank" data-url="https://github.com">
+<a class="card" href="https://github.com" target="_blank" data-url="https://github.com" title="https://github.com">
   
             <div class="field">
               <div class="label">Info</div>
               <div class="value">
-                Github <span class="status status-inline">⏳</span>
+                Github <span class="status status-inline">⏳</span> <span class="copy-btn" onclick="copyUrl(event, \"https://github.com\")">⧉</span>
               </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
               <div class="value">
-                Projects repository with version control 
+                Projects repository with version control  
               </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
               <div class="value">
-                Projects, Repository, Version controls 
+                Projects, Repository, Version controls  
               </div>
             </div>
             
 </a>
 
-<a class="card" href="https://vscode.dev/github.com/" title="https://vscode.dev/github.com/" target="_blank" data-url="https://vscode.dev/github.com/">
+<a class="card" href="https://vscode.dev/github.com/" target="_blank" data-url="https://vscode.dev/github.com/" title="https://vscode.dev/github.com/">
   
             <div class="field">
               <div class="label">Info</div>
               <div class="value">
-                VScode <span class="status status-inline">⏳</span>
+                VScode <span class="status status-inline">⏳</span> <span class="copy-btn" onclick="copyUrl(event, \"https://vscode.dev/github.com/\")">⧉</span>
               </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
               <div class="value">
-                The browser integrated online editor 
+                The browser integrated online editor  
               </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
               <div class="value">
-                VScode online Editor 
+                VScode online Editor  
               </div>
             </div>
             
 </a>
 
-<a class="card" href="https://copilot.microsoft.com/" title="https://copilot.microsoft.com/" target="_blank" data-url="https://copilot.microsoft.com/">
+<a class="card" href="https://copilot.microsoft.com/" target="_blank" data-url="https://copilot.microsoft.com/" title="https://copilot.microsoft.com/">
   
             <div class="field">
               <div class="label">Info</div>
               <div class="value">
-                Copilot <span class="status status-inline">⏳</span>
+                Copilot <span class="status status-inline">⏳</span> <span class="copy-btn" onclick="copyUrl(event, \"https://copilot.microsoft.com/\")">⧉</span>
               </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
               <div class="value">
-                Copilot - Microsoft AI agent 
+                Copilot - Microsoft AI agent  
               </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
               <div class="value">
-                Copilot, AI Agent 
+                Copilot, AI Agent  
               </div>
             </div>
             
 </a>
 
-<a class="card" href="https://search.brave.com/" title="https://search.brave.com/" target="_blank" data-url="https://search.brave.com/">
+<a class="card" href="https://search.brave.com/" target="_blank" data-url="https://search.brave.com/" title="https://search.brave.com/">
   
             <div class="field">
               <div class="label">Info</div>
               <div class="value">
-                Brave <span class="status status-inline">⏳</span>
+                Brave <span class="status status-inline">⏳</span> <span class="copy-btn" onclick="copyUrl(event, \"https://search.brave.com/\")">⧉</span>
               </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
               <div class="value">
-                Brave Search 
+                Brave Search  
               </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
               <div class="value">
-                Search, Privacy 
+                Search, Privacy  
               </div>
             </div>
             
 </a>
 
-<a class="card" href="https://gemini.google.com/app" title="https://gemini.google.com/app" target="_blank" data-url="https://gemini.google.com/app">
+<a class="card" href="https://gemini.google.com/app" target="_blank" data-url="https://gemini.google.com/app" title="https://gemini.google.com/app">
   
             <div class="field">
               <div class="label">Info</div>
               <div class="value">
-                Gemini <span class="status status-inline">⏳</span>
+                Gemini <span class="status status-inline">⏳</span> <span class="copy-btn" onclick="copyUrl(event, \"https://gemini.google.com/app\")">⧉</span>
               </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
               <div class="value">
-                Gemini chat 
+                Gemini chat  
               </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
               <div class="value">
-                Gemini, AI, Chatbot 
+                Gemini, AI, Chatbot  
               </div>
             </div>
             
 </a>
 
-<a class="card" href="https://www.aitmpl.com/" title="https://www.aitmpl.com/" target="_blank" data-url="https://www.aitmpl.com/">
+<a class="card" href="https://www.aitmpl.com/" target="_blank" data-url="https://www.aitmpl.com/" title="https://www.aitmpl.com/">
   
             <div class="field">
               <div class="label">Info</div>
               <div class="value">
-                Aitmpl <span class="status status-inline">⏳</span>
+                Aitmpl <span class="status status-inline">⏳</span> <span class="copy-btn" onclick="copyUrl(event, \"https://www.aitmpl.com/\")">⧉</span>
               </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
               <div class="value">
-                AI tools 
+                AI tools  
               </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
               <div class="value">
-                AI, Chatbot, Tools 
+                AI, Chatbot, Tools  
               </div>
             </div>
             
 </a>
 
-<a class="card" href="https://cobalt.tools/" title="https://cobalt.tools/" target="_blank" data-url="https://cobalt.tools/">
+<a class="card" href="https://cobalt.tools/" target="_blank" data-url="https://cobalt.tools/" title="https://cobalt.tools/">
   
             <div class="field">
               <div class="label">Info</div>
               <div class="value">
-                Cobalt <span class="status status-inline">⏳</span>
+                Cobalt <span class="status status-inline">⏳</span> <span class="copy-btn" onclick="copyUrl(event, \"https://cobalt.tools/\")">⧉</span>
               </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
               <div class="value">
-                Download videos from Internet 
+                Download videos from Internet  
               </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
               <div class="value">
-                Online Downloder, Video Downloder 
+                Online Downloder, Video Downloder  
               </div>
             </div>
             
 </a>
 
-<a class="card" href="https://test.example" title="https://test.example" target="_blank" data-url="https://test.example">
+<a class="card" href="https://test.example" target="_blank" data-url="https://test.example" title="https://test.example">
   
             <div class="field">
               <div class="label">Info</div>
               <div class="value">
-                Test <span class="status status-inline">⏳</span>
+                Test <span class="status status-inline">⏳</span> <span class="copy-btn" onclick="copyUrl(event, \"https://test.example\")">⧉</span>
               </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
               <div class="value">
-                Test page 
+                Test page  
               </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
               <div class="value">
-                Test, Down 
+                Test, Down  
               </div>
             </div>
             
 </a>
 
-<a class="card" href="https://naravu.github.io" title="https://naravu.github.io" target="_blank" data-url="https://naravu.github.io">
+<a class="card" href="https://naravu.github.io" target="_blank" data-url="https://naravu.github.io" title="https://naravu.github.io">
   
             <div class="field">
               <div class="label">Info</div>
               <div class="value">
-                Naravu <span class="status status-inline">⏳</span>
+                Naravu <span class="status status-inline">⏳</span> <span class="copy-btn" onclick="copyUrl(event, \"https://naravu.github.io\")">⧉</span>
               </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
               <div class="value">
-                My work 
+                My work  
               </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
               <div class="value">
-                Scripts, Tips, BMs 
+                Scripts, Tips, BMs  
               </div>
             </div>
             
@@ -431,6 +442,14 @@ body.light {
 
 const PASSWORD_HASH="e7e413b20ccdbbf5b89577eb35ccff413f3a7649ae3cc45f3802d9f58ad85a8a";
 
+/* Copy URL */
+function copyUrl(e, url){
+  e.preventDefault();
+  e.stopPropagation();
+  navigator.clipboard.writeText(url);
+}
+
+/* SHA */
 async function sha256(t){
  const d=new TextEncoder().encode(t);
  const h=await crypto.subtle.digest("SHA-256",d);
@@ -502,7 +521,7 @@ function exportToExcel(){
  XLSX.writeFile(wb,"dashboard.xlsx");
 }
 
-/* Inactivity lock */
+/* Inactivity */
 let t; const LIMIT=300000;
 
 function resetTimer(){
