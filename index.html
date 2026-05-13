@@ -108,14 +108,7 @@ body.light {
 .ok { color: #3b82f6; }
 .fail { color: var(--fail); }
 
-.footer {
-  margin-top: 18px;
-  text-align: center;
-  font-size: 11px;
-  color: var(--muted);
-}
-
-/* ✅ AUTH OVERLAY */
+/* AUTH */
 #auth {
   position: fixed;
   inset: 0;
@@ -143,7 +136,6 @@ body.light {
 
 <body>
 
-<!-- ✅ PASSWORD SCREEN -->
 <div id="auth">
   <div class="auth-box">
     <div>Password</div>
@@ -151,7 +143,6 @@ body.light {
   </div>
 </div>
 
-<!-- ✅ APP (hidden until login) -->
 <div id="app" style="display:none;">
 
 <div class="topbar">
@@ -438,15 +429,13 @@ body.light {
 
 </div>
 
-<div class="footer" id="footer"></div>
-
 </div>
 
 <script>
 
 const PASSWORD_HASH = "e7e413b20ccdbbf5b89577eb35ccff413f3a7649ae3cc45f3802d9f58ad85a8a";
 
-/* SHA-256 */
+/* SHA256 */
 async function sha256(text) {
   const data = new TextEncoder().encode(text);
   const hash = await crypto.subtle.digest("SHA-256", data);
@@ -455,7 +444,7 @@ async function sha256(text) {
     .join("");
 }
 
-/* ✅ AUTH LOGIN */
+/* AUTH */
 document.getElementById("pwd").addEventListener("keyup", async e => {
   if (e.key === "Enter") {
     const inputHash = await sha256(e.target.value);
@@ -463,17 +452,16 @@ document.getElementById("pwd").addEventListener("keyup", async e => {
       document.getElementById("auth").style.display = "none";
       document.getElementById("app").style.display = "block";
       checkStatuses();
-      updateFooter();
+      startInactivityTracking();  // ✅ start tracking
     } else {
       alert("Incorrect password");
     }
   }
 });
 
-/* Theme toggle */
-const body = document.body;
+/* Theme */
 document.getElementById("themeToggle").onclick = () => {
-  body.classList.toggle("light");
+  document.body.classList.toggle("light");
 };
 
 /* Search */
@@ -519,13 +507,7 @@ function exportToExcel() {
   XLSX.writeFile(wb, "dashboard.xlsx");
 }
 
-/* Footer */
-function updateFooter() {
-  document.getElementById("footer").textContent =
-    new Date().toLocaleString() + " © Service Dashboard";
-}
-
-/* Status check */
+/* Status */
 function checkStatuses() {
   document.querySelectorAll(".card").forEach(card => {
     const status = card.querySelector(".status-inline");
@@ -542,6 +524,28 @@ function checkStatuses() {
       });
   });
 }
+
+/* ✅ INACTIVITY LOCK */
+let inactivityTimer;
+const INACTIVITY_LIMIT = 5 * 60 * 1000;
+
+function resetInactivityTimer() {
+  clearTimeout(inactivityTimer);
+  inactivityTimer = setTimeout(() => {
+    document.getElementById("app").style.display = "none";
+    document.getElementById("auth").style.display = "flex";
+    document.getElementById("pwd").value = "";
+  }, INACTIVITY_LIMIT);
+}
+
+["mousemove","keydown","scroll","click"].forEach(e=>{
+  document.addEventListener(e, resetInactivityTimer);
+});
+
+function startInactivityTracking() {
+  resetInactivityTimer();
+}
+
 </script>
 
 </body>
