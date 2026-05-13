@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="fav.svg">
-<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <title>Service Dashboard</title>
 
 <style>
@@ -25,15 +23,6 @@ body {
   font-size: 13px;
   background: var(--bg);
   color: var(--text);
-  display: flex;
-}
-
-body.light {
-  --bg: #f5f5f5;
-  --card: #ffffff;
-  --text: #222222;
-  --muted: #666666;
-  --border: #dddddd;
 }
 
 .topbar {
@@ -53,73 +42,44 @@ body.light {
   color: var(--text);
 }
 
-.tools {
-  display: flex;
-  gap: 10px;
-  font-size: 14px;
-}
-
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 14px;
 }
 
-@keyframes neonPulse {
-  0% {
-    box-shadow:
-      0 10px 28px rgba(0, 0, 0, 0.6),
-      0 0 8px rgba(0, 255, 200, 0.2),
-      0 0 16px rgba(0, 255, 200, 0.15),
-      0 0 28px rgba(0, 255, 200, 0.1);
-  }
-
-  50% {
-    box-shadow:
-      0 12px 34px rgba(0, 0, 0, 0.7),
-      0 0 14px rgba(0, 255, 200, 0.35),
-      0 0 28px rgba(0, 255, 200, 0.3),
-      0 0 50px rgba(0, 255, 200, 0.25);
-  }
-
-  100% {
-    box-shadow:
-      0 10px 28px rgba(0, 0, 0, 0.6),
-      0 0 8px rgba(0, 255, 200, 0.2),
-      0 0 16px rgba(0, 255, 200, 0.15),
-      0 0 28px rgba(0, 255, 200, 0.1);
-  }
-}
-
+/* ✅ CARD (AI style preserved) */
 .card {
   background: var(--card);
   border-radius: 12px;
   padding: 14px;
   text-decoration: none;
   color: var(--text);
-  position: relative;
   border: 1px solid var(--border);
 
-  /* 🔥 AI-style soft layered shadow */
-  box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.35),
-    0 1px 2px rgba(255, 255, 255, 0.05) inset;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-  /* smooth animation */
-  transition: transform 0.2s ease,
-              box-shadow 0.2s ease,
-              border-color 0.2s ease;
+/* ✅ Neon pulse animation */
+@keyframes neonPulse {
+  0%,100% {
+    box-shadow:
+      0 4px 16px rgba(0,0,0,0.35),
+      0 0 10px rgba(0,255,200,0.15);
+  }
+  50% {
+    box-shadow:
+      0 10px 28px rgba(0,0,0,0.55),
+      0 0 30px rgba(0,255,200,0.35);
+  }
 }
 
 .card:hover {
   transform: translateY(-4px) scale(1.01);
-
-  border-color: rgba(0, 255, 200, 0.7);
-
-  /* 🔥 animated neon pulse */
-  animation: neonPulse 1.6s infinite;
+  animation: neonPulse 1.6s ease-in-out infinite;
 }
 
+/* Fields */
 .field {
   margin-bottom: 8px;
 }
@@ -134,116 +94,40 @@ body.light {
   word-break: break-word;
 }
 
-.status {
-  position: absolute;
-  top: 10px;
-  right: 12px;
-  font-size: 16px;
+/* ✅ URL + inline status */
+.url-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.ok { color: var(--ok); }
-.fail { color: var(--fail); }
+.status-inline {
+  font-size: 14px;
+}
 
+/* ✅ Blue tick style */
+.ok {
+  color: #3b82f6;
+}
+
+.fail {
+  color: var(--fail);
+}
+
+/* Footer */
 .footer {
   margin-top: 18px;
   text-align: center;
   font-size: 11px;
   color: var(--muted);
 }
-
-/* Auth overlay */
-#auth {
-  position: fixed;
-  inset: 0;
-  background: #000000ee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.auth-box {
-  background: #1e1e1e;
-  padding: 24px;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.auth-box input {
-  margin-top: 12px;
-  padding: 8px;
-  width: 200px;
-}
-
-.sidebar {
-  width: 0;
-  overflow: hidden;
-  transition: width 0.25s ease;
-  background: var(--card);
-  border-right: 1px solid var(--border);
-}
-
-.sidebar.active {
-  width: 220px;
-  padding: 16px;
-}
-
-#appWrapper {
-  flex: 1;
-}
-
-#layout {
-  display: flex;
-}
-
-/* Links */
-.sidebar a {
-  display: block;
-  margin: 12px 0;
-  color: var(--text);
-  text-decoration: none;
-}
-
-/* Hamburger */
-.menu-btn {
-  cursor: pointer;
-  font-size: 18px;
-}
-
-
 </style>
 </head>
 
 <body>
-<div id="layout">
-
-<div id="sidebar"></div>
-<div id="appWrapper">
-
-<span class="menu-btn" onclick="toggleMenu()">☰</span>
-<div id="sidebar" class="sidebar">
-  <a href="#">🏠 Home</a>
-  <a href="#">📊 Dashboard</a>
-  <a href="#">📁 Projects</a>
-  <a href="#">⚙ Settings</a>
-</div>
-
-<div id="auth">
-  <div class="auth-box">
-    <div>Password</div>
-    <input type="password" id="pwd" />
-  </div>
-</div>
-
-<div id="app" style="display:none;">
 
 <div class="topbar">
   <input type="text" class="search" placeholder="Search..." id="searchBox">
-  <div class="tools">
-    <span id="themeToggle">🌙</span>
-    <span onclick="window.print()">🖨</span>
-    <span onclick="exportToExcel()">📊</span>
-  </div>
 </div>
 
 <div class="container">
@@ -265,7 +149,14 @@ body.light {
               <div class="value">Python, docs</div>
             </div>
             
-  <div class="status">⏳</div>
+        <div class="field">
+          <div class="label">URL</div>
+          <div class="value url-line">
+            <span>https://docs.python.org</span>
+            <span class="status status-inline">⏳</span>
+          </div>
+        </div>
+        
 </a>
 
 <a class="card" href="https://github.com" target="_blank" data-url="https://github.com">
@@ -285,7 +176,14 @@ body.light {
               <div class="value">Projects, Repository, Version controls</div>
             </div>
             
-  <div class="status">⏳</div>
+        <div class="field">
+          <div class="label">URL</div>
+          <div class="value url-line">
+            <span>https://github.com</span>
+            <span class="status status-inline">⏳</span>
+          </div>
+        </div>
+        
 </a>
 
 <a class="card" href="https://vscode.dev/github.com/" target="_blank" data-url="https://vscode.dev/github.com/">
@@ -305,7 +203,14 @@ body.light {
               <div class="value">VScode online Editor</div>
             </div>
             
-  <div class="status">⏳</div>
+        <div class="field">
+          <div class="label">URL</div>
+          <div class="value url-line">
+            <span>https://vscode.dev/github.com/</span>
+            <span class="status status-inline">⏳</span>
+          </div>
+        </div>
+        
 </a>
 
 <a class="card" href="https://copilot.microsoft.com/" target="_blank" data-url="https://copilot.microsoft.com/">
@@ -325,7 +230,14 @@ body.light {
               <div class="value">Copilot, AI Agent</div>
             </div>
             
-  <div class="status">⏳</div>
+        <div class="field">
+          <div class="label">URL</div>
+          <div class="value url-line">
+            <span>https://copilot.microsoft.com/</span>
+            <span class="status status-inline">⏳</span>
+          </div>
+        </div>
+        
 </a>
 
 <a class="card" href="https://search.brave.com/" target="_blank" data-url="https://search.brave.com/">
@@ -345,7 +257,14 @@ body.light {
               <div class="value">Search, Privacy</div>
             </div>
             
-  <div class="status">⏳</div>
+        <div class="field">
+          <div class="label">URL</div>
+          <div class="value url-line">
+            <span>https://search.brave.com/</span>
+            <span class="status status-inline">⏳</span>
+          </div>
+        </div>
+        
 </a>
 
 <a class="card" href="https://gemini.google.com/app" target="_blank" data-url="https://gemini.google.com/app">
@@ -365,7 +284,14 @@ body.light {
               <div class="value">Gemini, AI, Chatbot</div>
             </div>
             
-  <div class="status">⏳</div>
+        <div class="field">
+          <div class="label">URL</div>
+          <div class="value url-line">
+            <span>https://gemini.google.com/app</span>
+            <span class="status status-inline">⏳</span>
+          </div>
+        </div>
+        
 </a>
 
 <a class="card" href="https://www.aitmpl.com/" target="_blank" data-url="https://www.aitmpl.com/">
@@ -385,7 +311,14 @@ body.light {
               <div class="value">AI, Chatbot, Tools</div>
             </div>
             
-  <div class="status">⏳</div>
+        <div class="field">
+          <div class="label">URL</div>
+          <div class="value url-line">
+            <span>https://www.aitmpl.com/</span>
+            <span class="status status-inline">⏳</span>
+          </div>
+        </div>
+        
 </a>
 
 <a class="card" href="https://cobalt.tools/" target="_blank" data-url="https://cobalt.tools/">
@@ -405,7 +338,14 @@ body.light {
               <div class="value">Online Downloder, Video Downloder</div>
             </div>
             
-  <div class="status">⏳</div>
+        <div class="field">
+          <div class="label">URL</div>
+          <div class="value url-line">
+            <span>https://cobalt.tools/</span>
+            <span class="status status-inline">⏳</span>
+          </div>
+        </div>
+        
 </a>
 
 <a class="card" href="https://test.example" target="_blank" data-url="https://test.example">
@@ -425,7 +365,14 @@ body.light {
               <div class="value">Test, Down</div>
             </div>
             
-  <div class="status">⏳</div>
+        <div class="field">
+          <div class="label">URL</div>
+          <div class="value url-line">
+            <span>https://test.example</span>
+            <span class="status status-inline">⏳</span>
+          </div>
+        </div>
+        
 </a>
 
 <a class="card" href="https://naravu.github.io" target="_blank" data-url="https://naravu.github.io">
@@ -445,42 +392,21 @@ body.light {
               <div class="value">Scripts, Tips, BMs</div>
             </div>
             
-  <div class="status">⏳</div>
+        <div class="field">
+          <div class="label">URL</div>
+          <div class="value url-line">
+            <span>https://naravu.github.io</span>
+            <span class="status status-inline">⏳</span>
+          </div>
+        </div>
+        
 </a>
 
 </div>
 
 <div class="footer" id="footer"></div>
 
-</div>
-
 <script>
-const PASSWORD_HASH = "e7e413b20ccdbbf5b89577eb35ccff413f3a7649ae3cc45f3802d9f58ad85a8a";
-
-/* SHA-256 */
-async function sha256(text) {
-  const data = new TextEncoder().encode(text);
-  const hash = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hash))
-    .map(b => b.toString(16).padStart(2, "0"))
-    .join("");
-}
-
-/* Auth */
-document.getElementById("pwd").addEventListener("keyup", async e => {
-  if (e.key === "Enter") {
-    const inputHash = await sha256(e.target.value);
-    if (inputHash === PASSWORD_HASH) {
-      document.getElementById("auth").style.display = "none";
-      document.getElementById("app").style.display = "block";
-      checkStatuses();
-      updateFooter();
-    } else {
-      alert("Incorrect password");
-    }
-  }
-});
-
 /* Search */
 document.getElementById("searchBox").addEventListener("keyup", e => {
   const q = e.target.value.toLowerCase();
@@ -489,63 +415,14 @@ document.getElementById("searchBox").addEventListener("keyup", e => {
   });
 });
 
-/* ✅ TRUE XLSX EXPORT */
-function exportToExcel() {
-  let data = [];
-  let headersSet = new Set();
-
-  document.querySelectorAll(".card").forEach(card => {
-    if (card.style.display === "none") return;
-
-    let row = {};
-
-    card.querySelectorAll(".field").forEach(f => {
-      let key = f.querySelector(".label").innerText.trim();
-      let val = f.querySelector(".value").innerText.trim();
-      row[key] = val;
-      headersSet.add(key);
-    });
-
-    row["URL"] = card.dataset.url;
-    headersSet.add("URL");
-
-    data.push(row);
-  });
-
-  const headers = Array.from(headersSet);
-
-  const sheetData = [
-    headers,
-    ...data.map(r => headers.map(h => r[h] || ""))
-  ];
-
-  const ws = XLSX.utils.aoa_to_sheet(sheetData);
-  const wb = XLSX.utils.book_new();
-
-  XLSX.utils.book_append_sheet(wb, ws, "Dashboard");
-
-  XLSX.writeFile(wb, "dashboard.xlsx");
-}
-
-/* Theme toggle */
-const body = document.body;
-const themeBtn = document.getElementById("themeToggle");
-
-themeBtn.onclick = () => {
-  body.classList.toggle("light");
-  themeBtn.textContent = body.classList.contains("light") ? "☀️" : "🌙";
-};
-
 /* Footer */
-function updateFooter() {
-  document.getElementById("footer").textContent =
-    new Date().toLocaleString() + " © Service Dashboard";
-}
+document.getElementById("footer").textContent =
+  new Date().toLocaleString() + " © Service Dashboard";
 
 /* Status check */
 function checkStatuses() {
   document.querySelectorAll(".card").forEach(card => {
-    const status = card.querySelector(".status");
+    const status = card.querySelector(".status-inline");
     const url = card.dataset.url;
 
     fetch(url, { method: "HEAD", mode: "no-cors" })
@@ -560,13 +437,8 @@ function checkStatuses() {
   });
 }
 
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("active");
-}
+checkStatuses();
 </script>
 
-</div>
-
-</div>
 </body>
 </html>
