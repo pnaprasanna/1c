@@ -114,6 +114,32 @@ body.light {
   gap: 14px;
 }
 
+@keyframes neonPulse {
+  0% {
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.6),
+      0 0 8px rgba(0, 255, 200, 0.2),
+      0 0 16px rgba(0, 255, 200, 0.15),
+      0 0 28px rgba(0, 255, 200, 0.1);
+  }
+
+  50% {
+    box-shadow:
+      0 12px 34px rgba(0, 0, 0, 0.7),
+      0 0 14px rgba(0, 255, 200, 0.35),
+      0 0 28px rgba(0, 255, 200, 0.3),
+      0 0 50px rgba(0, 255, 200, 0.25);
+  }
+
+  100% {
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.6),
+      0 0 8px rgba(0, 255, 200, 0.2),
+      0 0 16px rgba(0, 255, 200, 0.15),
+      0 0 28px rgba(0, 255, 200, 0.1);
+  }
+}
+
 .card {
   background: var(--card);
   border-radius: 12px;
@@ -137,13 +163,10 @@ body.light {
 .card:hover {
   transform: translateY(-4px) scale(1.01);
 
-  /* ✨ glowing elevation effect */
-  box-shadow:
-    0 10px 28px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(255, 255, 255, 0.06),
-    0 0 12px rgba(100, 150, 255, 0.15);
+  border-color: rgba(0, 255, 200, 0.7);
 
-  border-color: rgba(100, 150, 255, 0.3);
+  /* 🔥 animated neon pulse */
+  animation: neonPulse 1.6s ease-in-out infinite;
 }
 
 .field {
