@@ -40,7 +40,7 @@ def md_to_cards(md_file, html_file):
             </div>
             """
 
-        # ✅ URL with inline status (kept)
+        # URL + inline status
         fields_html += f"""
         <div class="field">
           <div class="label">URL</div>
@@ -63,6 +63,7 @@ def md_to_cards(md_file, html_file):
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="fav.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <title>Service Dashboard</title>
 
 <style>
@@ -85,6 +86,14 @@ body {
   color: var(--text);
 }
 
+body.light {
+  --bg: #f5f5f5;
+  --card: #ffffff;
+  --text: #222222;
+  --muted: #666666;
+  --border: #dddddd;
+}
+
 .topbar {
   display: flex;
   align-items: center;
@@ -102,13 +111,21 @@ body {
   color: var(--text);
 }
 
+/* ✅ buttons */
+.tools {
+  display: flex;
+  gap: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 .container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 14px;
 }
 
-/* ✅ CARD (AI style preserved) */
+/* Cards */
 .card {
   background: var(--card);
   border-radius: 12px;
@@ -116,11 +133,9 @@ body {
   text-decoration: none;
   color: var(--text);
   border: 1px solid var(--border);
-
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* ✅ Neon pulse animation */
 @keyframes neonPulse {
   0%,100% {
     box-shadow:
@@ -139,7 +154,6 @@ body {
   animation: neonPulse 1.6s ease-in-out infinite;
 }
 
-/* Fields */
 .field {
   margin-bottom: 8px;
 }
@@ -154,7 +168,7 @@ body {
   word-break: break-word;
 }
 
-/* ✅ URL + inline status */
+/* URL + tick */
 .url-line {
   display: flex;
   align-items: center;
@@ -165,16 +179,9 @@ body {
   font-size: 14px;
 }
 
-/* ✅ Blue tick style */
-.ok {
-  color: #3b82f6;
-}
+.ok { color: #3b82f6; }
+.fail { color: var(--fail); }
 
-.fail {
-  color: var(--fail);
-}
-
-/* Footer */
 .footer {
   margin-top: 18px;
   text-align: center;
@@ -188,6 +195,12 @@ body {
 
 <div class="topbar">
   <input type="text" class="search" placeholder="Search..." id="searchBox">
+
+  <div class="tools">
+    <span id="themeToggle">🌙</span>
+    <span onclick="window.print()">🖨</span>
+    <span onclick="exportToExcel()">📊</span>
+  </div>
 </div>
 
 <div class="container">
@@ -197,6 +210,16 @@ __CARDS__
 <div class="footer" id="footer"></div>
 
 <script>
+
+/* Theme toggle */
+const body = document.body;
+const themeBtn = document.getElementById("themeToggle");
+
+themeBtn.onclick = () => {
+  body.classList.toggle("light");
+  themeBtn.textContent = body.classList.contains("light") ? "☀️" : "🌙";
+};
+
 /* Search */
 document.getElementById("searchBox").addEventListener("keyup", e => {
   const q = e.target.value.toLowerCase();
@@ -204,6 +227,44 @@ document.getElementById("searchBox").addEventListener("keyup", e => {
     card.style.display = card.innerText.toLowerCase().includes(q) ? "" : "none";
   });
 });
+
+/* Excel export */
+function exportToExcel() {
+  let data = [];
+  let headersSet = new Set();
+
+  document.querySelectorAll(".card").forEach(card => {
+    if (card.style.display === "none") return;
+
+    let row = {};
+
+    card.querySelectorAll(".field").forEach(f => {
+      let key = f.querySelector(".label").innerText.trim();
+      let val = f.querySelector(".value").innerText.trim();
+      row[key] = val;
+      headersSet.add(key);
+    });
+
+    row["URL"] = card.dataset.url;
+    headersSet.add("URL");
+
+    data.push(row);
+  });
+
+  const headers = Array.from(headersSet);
+
+  const sheetData = [
+    headers,
+    ...data.map(r => headers.map(h => r[h] || ""))
+  ];
+
+  const ws = XLSX.utils.aoa_to_sheet(sheetData);
+  const wb = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(wb, ws, "Dashboard");
+
+  XLSX.writeFile(wb, "dashboard.xlsx");
+}
 
 /* Footer */
 document.getElementById("footer").textContent =
