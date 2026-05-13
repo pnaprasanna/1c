@@ -116,17 +116,34 @@ body.light {
 
 .card {
   background: var(--card);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 14px;
   text-decoration: none;
   color: var(--text);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
   position: relative;
   border: 1px solid var(--border);
+
+  /* 🔥 AI-style soft layered shadow */
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.35),
+    0 1px 2px rgba(255, 255, 255, 0.05) inset;
+
+  /* smooth animation */
+  transition: transform 0.2s ease,
+              box-shadow 0.2s ease,
+              border-color 0.2s ease;
 }
 
 .card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px) scale(1.01);
+
+  /* ✨ glowing elevation effect */
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 12px rgba(100, 150, 255, 0.15);
+
+  border-color: rgba(100, 150, 255, 0.3);
 }
 
 .field {
