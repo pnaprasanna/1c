@@ -30,7 +30,6 @@ def md_to_cards(md_file, html_file):
             continue
 
         fields_html = ""
-
         for k, v in data.items():
             if k.lower() == "url":
                 continue
@@ -41,7 +40,7 @@ def md_to_cards(md_file, html_file):
             </div>
             """
 
-        # ✅ URL with inline status
+        # ✅ URL with inline status (kept)
         fields_html += f"""
         <div class="field">
           <div class="label">URL</div>
@@ -59,7 +58,7 @@ def md_to_cards(md_file, html_file):
 """
 
     html_template = """<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,51 +77,13 @@ def md_to_cards(md_file, html_file):
 
 body {
   margin: 0;
+  padding: 14px;
   font-family: Arial, Helvetica, Verdana, sans-serif;
+  font-size: 13px;
   background: var(--bg);
   color: var(--text);
 }
 
-/* ✅ LAYOUT FIX */
-#layout {
-  display: flex;
-  min-height: 100vh;
-}
-
-/* ✅ SIDEBAR */
-.sidebar {
-  width: 0;
-  overflow: hidden;
-  background: var(--card);
-  border-right: 1px solid var(--border);
-  transition: width 0.3s ease;
-}
-
-.sidebar.active {
-  width: 220px;
-  padding: 16px;
-}
-
-.sidebar a {
-  display: block;
-  margin: 12px 0;
-  color: var(--text);
-  text-decoration: none;
-}
-
-/* ✅ MAIN CONTENT */
-#main {
-  flex: 1;
-  padding: 14px;
-}
-
-/* ✅ MENU BUTTON */
-.menu-btn {
-  cursor: pointer;
-  font-size: 18px;
-}
-
-/* existing UI */
 .topbar {
   display: flex;
   align-items: center;
@@ -133,7 +94,11 @@ body {
 .search {
   flex: 1;
   max-width: 420px;
-  padding: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
 }
 
 .container {
@@ -142,7 +107,7 @@ body {
   gap: 14px;
 }
 
-/* ✅ CARD (UNCHANGED STYLE) */
+/* ✅ CARD (AI style preserved) */
 .card {
   background: var(--card);
   border-radius: 12px;
@@ -150,30 +115,45 @@ body {
   text-decoration: none;
   color: var(--text);
   border: 1px solid var(--border);
-  transition: 0.2s;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* ✅ Neon pulse preserved */
+/* ✅ Neon pulse animation */
 @keyframes neonPulse {
   0%,100% {
-    box-shadow: 0 0 10px rgba(0,255,200,0.2);
+    box-shadow:
+      0 4px 16px rgba(0,0,0,0.35),
+      0 0 10px rgba(0,255,200,0.15);
   }
   50% {
-    box-shadow: 0 0 30px rgba(0,255,200,0.4);
+    box-shadow:
+      0 10px 28px rgba(0,0,0,0.55),
+      0 0 30px rgba(0,255,200,0.35);
   }
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(0,255,200,0.6);
-  animation: neonPulse 1.5s infinite;
+  transform: translateY(-4px) scale(1.01);
+  animation: neonPulse 1.6s ease-in-out infinite;
 }
 
-.field { margin-bottom: 8px; }
-.label { font-size: 11px; color: var(--muted); }
-.value { font-weight: 600; }
+/* Fields */
+.field {
+  margin-bottom: 8px;
+}
 
-/* ✅ URL + STATUS */
+.label {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.value {
+  font-weight: 600;
+  word-break: break-word;
+}
+
+/* ✅ URL + inline status */
 .url-line {
   display: flex;
   align-items: center;
@@ -184,6 +164,7 @@ body {
   font-size: 14px;
 }
 
+/* ✅ Blue tick style */
 .ok {
   color: #3b82f6;
 }
@@ -192,49 +173,30 @@ body {
   color: var(--fail);
 }
 
-/* ✅ Mobile fix */
-@media (max-width: 768px) {
-  .sidebar.active {
-    width: 180px;
-  }
+/* Footer */
+.footer {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
 }
 </style>
 </head>
 
 <body>
 
-<div id="layout">
-
-  <!-- ✅ SIDEBAR -->
-  <div id="sidebar" class="sidebar">
-    <a href="#">🏠 Home</a>
-    <a href="#">📊 Dashboard</a>
-    <a href="#">📁 Projects</a>
-    <a href="#">⚙ Settings</a>
-  </div>
-
-  <!-- ✅ MAIN -->
-  <div id="main">
-
-    <div class="topbar">
-      <span class="menu-btn" onclick="toggleMenu()">☰</span>
-      <input type="text" class="search" placeholder="Search..." id="searchBox">
-    </div>
-
-    <div class="container">
-    __CARDS__
-    </div>
-
-  </div>
-
+<div class="topbar">
+  <input type="text" class="search" placeholder="Search..." id="searchBox">
 </div>
 
-<script>
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("active");
-}
+<div class="container">
+__CARDS__
+</div>
 
-/* search */
+<div class="footer" id="footer"></div>
+
+<script>
+/* Search */
 document.getElementById("searchBox").addEventListener("keyup", e => {
   const q = e.target.value.toLowerCase();
   document.querySelectorAll(".card").forEach(card => {
@@ -242,7 +204,11 @@ document.getElementById("searchBox").addEventListener("keyup", e => {
   });
 });
 
-/* status */
+/* Footer */
+document.getElementById("footer").textContent =
+  new Date().toLocaleString() + " © Service Dashboard";
+
+/* Status check */
 function checkStatuses() {
   document.querySelectorAll(".card").forEach(card => {
     const status = card.querySelector(".status-inline");
