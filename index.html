@@ -25,6 +25,7 @@ body {
   font-size: 13px;
   background: var(--bg);
   color: var(--text);
+  display: flex;
 }
 
 body.light {
@@ -174,40 +175,52 @@ body.light {
   width: 200px;
 }
 
+
+/* Sidebar (push layout style) */
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: -240px;
-  width: 220px;
-  height: 100%;
+  width: 0;
+  overflow: hidden;
   background: var(--card);
   border-right: 1px solid var(--border);
-  padding: 16px;
-  transition: left 0.25s ease;
-  z-index: 1000;
+  transition: width 0.25s ease;
+  height: 100vh;
+  padding: 0;
 }
 
+/* Open state */
 .sidebar.active {
-  left: 0;
+  width: 220px;
+  padding: 16px;
 }
 
+/* Content wrapper shifts automatically */
+#appWrapper {
+  flex: 1;
+  transition: margin 0.25s ease;
+}
+
+/* Links */
 .sidebar a {
   display: block;
   margin: 12px 0;
   color: var(--text);
   text-decoration: none;
-  font-size: 14px;
 }
 
+/* Hamburger */
 .menu-btn {
   cursor: pointer;
   font-size: 18px;
 }
 
+
 </style>
 </head>
 
 <body>
+
+<div id="appWrapper">
+
 <span class="menu-btn" onclick="toggleMenu()">☰</span>
 <div id="sidebar" class="sidebar">
   <a href="#">🏠 Home</a>
@@ -553,5 +566,6 @@ function toggleMenu() {
 }
 </script>
 
+</div>
 </body>
 </html>
