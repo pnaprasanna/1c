@@ -61,7 +61,6 @@ def md_to_cards(md_file, html_file):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="fav.svg">
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <title>Service Dashboard</title>
 
@@ -135,14 +134,12 @@ body.light {
 
 @keyframes neonPulse {
   0%,100% {
-    box-shadow:
-      0 4px 16px rgba(0,0,0,0.35),
-      0 0 10px rgba(0,255,200,0.15);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.35),
+                0 0 10px rgba(0,255,200,0.15);
   }
   50% {
-    box-shadow:
-      0 10px 28px rgba(0,0,0,0.55),
-      0 0 30px rgba(0,255,200,0.35);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.55),
+                0 0 30px rgba(0,255,200,0.35);
   }
 }
 
@@ -161,12 +158,38 @@ body.light {
   gap: 6px;
 }
 
-.status-inline { font-size: 14px; }
+/* ✅ STATUS BADGE */
+.status-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 11px;
+  border-radius: 50%;
+  font-weight: bold;
+  transform-origin: center;
+}
 
-.ok { color: #3b82f6; }
-.fail { color: var(--fail); }
+/* ✅ Tick animation */
+@keyframes tickPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
 
-/* AUTH */
+.ok {
+  background-color: #2ea44f;
+  color: white;
+  animation: tickPop 0.3s ease-out;
+}
+
+.fail {
+  background-color: #e5533d;
+  color: white;
+}
+
+/* Auth */
 #auth {
   position: fixed;
   inset: 0;
@@ -223,7 +246,7 @@ __CARDS__
 
 const PASSWORD_HASH = "__PASSWORD_HASH__";
 
-/* SHA256 */
+/* SHA */
 async function sha256(text) {
   const data = new TextEncoder().encode(text);
   const hash = await crypto.subtle.digest("SHA-256", data);
@@ -232,7 +255,7 @@ async function sha256(text) {
     .join("");
 }
 
-/* AUTH */
+/* Auth */
 document.getElementById("pwd").addEventListener("keyup", async e => {
   if (e.key === "Enter") {
     const inputHash = await sha256(e.target.value);
@@ -240,7 +263,7 @@ document.getElementById("pwd").addEventListener("keyup", async e => {
       document.getElementById("auth").style.display = "none";
       document.getElementById("app").style.display = "block";
       checkStatuses();
-      startInactivityTracking();  // ✅ start tracking
+      startInactivityTracking();
     } else {
       alert("Incorrect password");
     }
@@ -269,7 +292,6 @@ function exportToExcel() {
     if (card.style.display === "none") return;
 
     let row = {};
-
     card.querySelectorAll(".field").forEach(f => {
       let key = f.querySelector(".label").innerText.trim();
       let val = f.querySelector(".value").innerText.trim();
@@ -278,8 +300,6 @@ function exportToExcel() {
     });
 
     row["URL"] = card.dataset.url;
-    headersSet.add("URL");
-
     data.push(row);
   });
 
@@ -303,7 +323,7 @@ function checkStatuses() {
 
     fetch(url, { method: "HEAD", mode: "no-cors" })
       .then(() => {
-        status.textContent = "✔";
+        status.textContent = "✓";
         status.classList.add("ok");
       })
       .catch(() => {
@@ -313,7 +333,7 @@ function checkStatuses() {
   });
 }
 
-/* ✅ INACTIVITY LOCK */
+/* Inactivity lock */
 let inactivityTimer;
 const INACTIVITY_LIMIT = 5 * 60 * 1000;
 
@@ -353,3 +373,4 @@ function startInactivityTracking() {
 
 
 md_to_cards("bm.md", "index.html")
+``
