@@ -1,5 +1,6 @@
 import os
-import markdownimport hashlib
+import markdown
+import hashlib
 from bs4 import BeautifulSoup
 
 def md_to_cards(md_file, html_file):
