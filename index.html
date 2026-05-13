@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="fav.svg">
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <title>Service Dashboard</title>
 
@@ -30,9 +29,9 @@ body {
 body.light {
   --bg: #f5f5f5;
   --card: #ffffff;
-  --text: #222222;
-  --muted: #666666;
-  --border: #dddddd;
+  --text: #222;
+  --muted: #666;
+  --border: #ddd;
 }
 
 .topbar {
@@ -55,66 +54,54 @@ body.light {
 .tools {
   display: flex;
   gap: 10px;
-  font-size: 16px;
   cursor: pointer;
 }
 
 .container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
 }
 
+/* ✅ Compact card */
 .card {
   background: var(--card);
-  border-radius: 12px;
-  padding: 14px;
+  border-radius: 10px;
+  padding: 10px;
   text-decoration: none;
   color: var(--text);
   border: 1px solid var(--border);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
+/* Hover glow */
 @keyframes neonPulse {
-  0%,100% {
-    box-shadow: 0 4px 16px rgba(0,0,0,0.35),
-                0 0 10px rgba(0,255,200,0.15);
-  }
-  50% {
-    box-shadow: 0 10px 28px rgba(0,0,0,0.55),
-                0 0 30px rgba(0,255,200,0.35);
-  }
+  0%,100% { box-shadow: 0 0 10px rgba(0,255,200,0.15); }
+  50% { box-shadow: 0 0 25px rgba(0,255,200,0.35); }
 }
 
 .card:hover {
-  transform: translateY(-4px) scale(1.01);
-  animation: neonPulse 1.6s ease-in-out infinite;
+  transform: translateY(-3px);
+  animation: neonPulse 1.4s infinite;
 }
 
-.field { margin-bottom: 8px; }
-.label { font-size: 11px; color: var(--muted); }
-.value { font-weight: 600; word-break: break-word; }
+.field { margin-bottom: 6px; }
+.label { font-size: 10px; color: var(--muted); }
+.value { font-weight: 600; }
 
-.url-line {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* ✅ STATUS BADGE */
+/* ✅ GitHub style badge */
 .status-inline {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
-  font-size: 11px;
+  width: 15px;
+  height: 15px;
+  margin-left: 6px;
+  font-size: 10px;
   border-radius: 50%;
-  font-weight: bold;
-  transform-origin: center;
 }
 
-/* ✅ Tick animation */
+/* Tick animation */
 @keyframes tickPop {
   0% { transform: scale(0.5); opacity: 0; }
   60% { transform: scale(1.2); opacity: 1; }
@@ -122,38 +109,39 @@ body.light {
 }
 
 .ok {
-  background-color: #2ea44f;
-  color: white;
+  background: #2ea44f;
+  color: #fff;
   animation: tickPop 0.3s ease-out;
 }
 
 .fail {
-  background-color: #e5533d;
-  color: white;
+  background: #e5533d;
+  color: #fff;
+}
+
+/* Footer minimal */
+.footer {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 10px;
+  color: var(--muted);
 }
 
 /* Auth */
 #auth {
   position: fixed;
   inset: 0;
-  background: #000000ee;
+  background: #000c;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
 }
 
 .auth-box {
   background: #1e1e1e;
-  padding: 24px;
+  padding: 20px;
   border-radius: 8px;
   text-align: center;
-}
-
-.auth-box input {
-  margin-top: 12px;
-  padding: 8px;
-  width: 200px;
 }
 </style>
 </head>
@@ -162,16 +150,15 @@ body.light {
 
 <div id="auth">
   <div class="auth-box">
-    <div>Password</div>
-    <input type="password" id="pwd" autofocus />
+    Password<br>
+    <input type="password" id="pwd">
   </div>
 </div>
 
 <div id="app" style="display:none;">
 
 <div class="topbar">
-  <input type="text" class="search" placeholder="Search..." id="searchBox">
-
+  <input class="search" id="searchBox" placeholder="Search...">
   <div class="tools">
     <span id="themeToggle">🌙</span>
     <span onclick="window.print()">🖨</span>
@@ -181,392 +168,355 @@ body.light {
 
 <div class="container">
 
-<a class="card" href="https://docs.python.org" target="_blank" data-url="https://docs.python.org">
+<a class="card" href="https://docs.python.org" title="https://docs.python.org" target="_blank" data-url="https://docs.python.org">
   
             <div class="field">
               <div class="label">Info</div>
-              <div class="value">Python Docs</div>
+              <div class="value">
+                Python Docs <span class="status status-inline">⏳</span>
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
-              <div class="value">Official Python docs</div>
+              <div class="value">
+                Official Python docs 
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
-              <div class="value">Python, docs</div>
+              <div class="value">
+                Python, docs 
+              </div>
             </div>
             
-        <div class="field">
-          <div class="label">URL</div>
-          <div class="value url-line">
-            <span>https://docs.python.org</span>
-            <span class="status status-inline">⏳</span>
-          </div>
-        </div>
-        
 </a>
 
-<a class="card" href="https://github.com" target="_blank" data-url="https://github.com">
+<a class="card" href="https://github.com" title="https://github.com" target="_blank" data-url="https://github.com">
   
             <div class="field">
               <div class="label">Info</div>
-              <div class="value">Github</div>
+              <div class="value">
+                Github <span class="status status-inline">⏳</span>
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
-              <div class="value">Projects repository with version control</div>
+              <div class="value">
+                Projects repository with version control 
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
-              <div class="value">Projects, Repository, Version controls</div>
+              <div class="value">
+                Projects, Repository, Version controls 
+              </div>
             </div>
             
-        <div class="field">
-          <div class="label">URL</div>
-          <div class="value url-line">
-            <span>https://github.com</span>
-            <span class="status status-inline">⏳</span>
-          </div>
-        </div>
-        
 </a>
 
-<a class="card" href="https://vscode.dev/github.com/" target="_blank" data-url="https://vscode.dev/github.com/">
+<a class="card" href="https://vscode.dev/github.com/" title="https://vscode.dev/github.com/" target="_blank" data-url="https://vscode.dev/github.com/">
   
             <div class="field">
               <div class="label">Info</div>
-              <div class="value">VScode</div>
+              <div class="value">
+                VScode <span class="status status-inline">⏳</span>
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
-              <div class="value">The browser integrated online editor</div>
+              <div class="value">
+                The browser integrated online editor 
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
-              <div class="value">VScode online Editor</div>
+              <div class="value">
+                VScode online Editor 
+              </div>
             </div>
             
-        <div class="field">
-          <div class="label">URL</div>
-          <div class="value url-line">
-            <span>https://vscode.dev/github.com/</span>
-            <span class="status status-inline">⏳</span>
-          </div>
-        </div>
-        
 </a>
 
-<a class="card" href="https://copilot.microsoft.com/" target="_blank" data-url="https://copilot.microsoft.com/">
+<a class="card" href="https://copilot.microsoft.com/" title="https://copilot.microsoft.com/" target="_blank" data-url="https://copilot.microsoft.com/">
   
             <div class="field">
               <div class="label">Info</div>
-              <div class="value">Copilot</div>
+              <div class="value">
+                Copilot <span class="status status-inline">⏳</span>
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
-              <div class="value">Copilot - Microsoft AI agent</div>
+              <div class="value">
+                Copilot - Microsoft AI agent 
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
-              <div class="value">Copilot, AI Agent</div>
+              <div class="value">
+                Copilot, AI Agent 
+              </div>
             </div>
             
-        <div class="field">
-          <div class="label">URL</div>
-          <div class="value url-line">
-            <span>https://copilot.microsoft.com/</span>
-            <span class="status status-inline">⏳</span>
-          </div>
-        </div>
-        
 </a>
 
-<a class="card" href="https://search.brave.com/" target="_blank" data-url="https://search.brave.com/">
+<a class="card" href="https://search.brave.com/" title="https://search.brave.com/" target="_blank" data-url="https://search.brave.com/">
   
             <div class="field">
               <div class="label">Info</div>
-              <div class="value">Brave</div>
+              <div class="value">
+                Brave <span class="status status-inline">⏳</span>
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
-              <div class="value">Brave Search</div>
+              <div class="value">
+                Brave Search 
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
-              <div class="value">Search, Privacy</div>
+              <div class="value">
+                Search, Privacy 
+              </div>
             </div>
             
-        <div class="field">
-          <div class="label">URL</div>
-          <div class="value url-line">
-            <span>https://search.brave.com/</span>
-            <span class="status status-inline">⏳</span>
-          </div>
-        </div>
-        
 </a>
 
-<a class="card" href="https://gemini.google.com/app" target="_blank" data-url="https://gemini.google.com/app">
+<a class="card" href="https://gemini.google.com/app" title="https://gemini.google.com/app" target="_blank" data-url="https://gemini.google.com/app">
   
             <div class="field">
               <div class="label">Info</div>
-              <div class="value">Gemini</div>
+              <div class="value">
+                Gemini <span class="status status-inline">⏳</span>
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
-              <div class="value">Gemini chat</div>
+              <div class="value">
+                Gemini chat 
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
-              <div class="value">Gemini, AI, Chatbot</div>
+              <div class="value">
+                Gemini, AI, Chatbot 
+              </div>
             </div>
             
-        <div class="field">
-          <div class="label">URL</div>
-          <div class="value url-line">
-            <span>https://gemini.google.com/app</span>
-            <span class="status status-inline">⏳</span>
-          </div>
-        </div>
-        
 </a>
 
-<a class="card" href="https://www.aitmpl.com/" target="_blank" data-url="https://www.aitmpl.com/">
+<a class="card" href="https://www.aitmpl.com/" title="https://www.aitmpl.com/" target="_blank" data-url="https://www.aitmpl.com/">
   
             <div class="field">
               <div class="label">Info</div>
-              <div class="value">Aitmpl</div>
+              <div class="value">
+                Aitmpl <span class="status status-inline">⏳</span>
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
-              <div class="value">AI tools</div>
+              <div class="value">
+                AI tools 
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
-              <div class="value">AI, Chatbot, Tools</div>
+              <div class="value">
+                AI, Chatbot, Tools 
+              </div>
             </div>
             
-        <div class="field">
-          <div class="label">URL</div>
-          <div class="value url-line">
-            <span>https://www.aitmpl.com/</span>
-            <span class="status status-inline">⏳</span>
-          </div>
-        </div>
-        
 </a>
 
-<a class="card" href="https://cobalt.tools/" target="_blank" data-url="https://cobalt.tools/">
+<a class="card" href="https://cobalt.tools/" title="https://cobalt.tools/" target="_blank" data-url="https://cobalt.tools/">
   
             <div class="field">
               <div class="label">Info</div>
-              <div class="value">Cobalt</div>
+              <div class="value">
+                Cobalt <span class="status status-inline">⏳</span>
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
-              <div class="value">Download videos from Internet</div>
+              <div class="value">
+                Download videos from Internet 
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
-              <div class="value">Online Downloder, Video Downloder</div>
+              <div class="value">
+                Online Downloder, Video Downloder 
+              </div>
             </div>
             
-        <div class="field">
-          <div class="label">URL</div>
-          <div class="value url-line">
-            <span>https://cobalt.tools/</span>
-            <span class="status status-inline">⏳</span>
-          </div>
-        </div>
-        
 </a>
 
-<a class="card" href="https://test.example" target="_blank" data-url="https://test.example">
+<a class="card" href="https://test.example" title="https://test.example" target="_blank" data-url="https://test.example">
   
             <div class="field">
               <div class="label">Info</div>
-              <div class="value">Test</div>
+              <div class="value">
+                Test <span class="status status-inline">⏳</span>
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
-              <div class="value">Test page</div>
+              <div class="value">
+                Test page 
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
-              <div class="value">Test, Down</div>
+              <div class="value">
+                Test, Down 
+              </div>
             </div>
             
-        <div class="field">
-          <div class="label">URL</div>
-          <div class="value url-line">
-            <span>https://test.example</span>
-            <span class="status status-inline">⏳</span>
-          </div>
-        </div>
-        
 </a>
 
-<a class="card" href="https://naravu.github.io" target="_blank" data-url="https://naravu.github.io">
+<a class="card" href="https://naravu.github.io" title="https://naravu.github.io" target="_blank" data-url="https://naravu.github.io">
   
             <div class="field">
               <div class="label">Info</div>
-              <div class="value">Naravu</div>
+              <div class="value">
+                Naravu <span class="status status-inline">⏳</span>
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Explanation</div>
-              <div class="value">My work</div>
+              <div class="value">
+                My work 
+              </div>
             </div>
             
             <div class="field">
               <div class="label">Tags</div>
-              <div class="value">Scripts, Tips, BMs</div>
+              <div class="value">
+                Scripts, Tips, BMs 
+              </div>
             </div>
             
-        <div class="field">
-          <div class="label">URL</div>
-          <div class="value url-line">
-            <span>https://naravu.github.io</span>
-            <span class="status status-inline">⏳</span>
-          </div>
-        </div>
-        
 </a>
 
+</div>
+
+<div class="footer">
+  © Service Dashboard | Internal Use Only
 </div>
 
 </div>
 
 <script>
 
-const PASSWORD_HASH = "e7e413b20ccdbbf5b89577eb35ccff413f3a7649ae3cc45f3802d9f58ad85a8a";
+const PASSWORD_HASH="e7e413b20ccdbbf5b89577eb35ccff413f3a7649ae3cc45f3802d9f58ad85a8a";
 
-/* SHA */
-async function sha256(text) {
-  const data = new TextEncoder().encode(text);
-  const hash = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hash))
-    .map(b => b.toString(16).padStart(2, "0"))
-    .join("");
+async function sha256(t){
+ const d=new TextEncoder().encode(t);
+ const h=await crypto.subtle.digest("SHA-256",d);
+ return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,"0")).join("");
 }
 
-/* Auth */
-document.getElementById("pwd").addEventListener("keyup", async e => {
-  if (e.key === "Enter") {
-    const inputHash = await sha256(e.target.value);
-    if (inputHash === PASSWORD_HASH) {
-      document.getElementById("auth").style.display = "none";
-      document.getElementById("app").style.display = "block";
-      checkStatuses();
-      startInactivityTracking();
-    } else {
-      alert("Incorrect password");
-    }
-  }
+document.getElementById("pwd").addEventListener("keyup",async e=>{
+ if(e.key==="Enter"){
+  const h=await sha256(e.target.value);
+  if(h===PASSWORD_HASH){
+   auth.style.display="none";
+   app.style.display="block";
+   checkStatuses();
+   startInactivityTracking();
+  }else alert("Wrong password");
+ }
 });
 
 /* Theme */
-document.getElementById("themeToggle").onclick = () => {
-  document.body.classList.toggle("light");
-};
+themeToggle.onclick=()=>document.body.classList.toggle("light");
 
 /* Search */
-document.getElementById("searchBox").addEventListener("keyup", e => {
-  const q = e.target.value.toLowerCase();
-  document.querySelectorAll(".card").forEach(card => {
-    card.style.display = card.innerText.toLowerCase().includes(q) ? "" : "none";
-  });
-});
-
-/* Excel */
-function exportToExcel() {
-  let data = [];
-  let headersSet = new Set();
-
-  document.querySelectorAll(".card").forEach(card => {
-    if (card.style.display === "none") return;
-
-    let row = {};
-    card.querySelectorAll(".field").forEach(f => {
-      let key = f.querySelector(".label").innerText.trim();
-      let val = f.querySelector(".value").innerText.trim();
-      row[key] = val;
-      headersSet.add(key);
-    });
-
-    row["URL"] = card.dataset.url;
-    data.push(row);
-  });
-
-  const headers = Array.from(headersSet);
-  const sheetData = [
-    headers,
-    ...data.map(r => headers.map(h => r[h] || ""))
-  ];
-
-  const ws = XLSX.utils.aoa_to_sheet(sheetData);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "Dashboard");
-  XLSX.writeFile(wb, "dashboard.xlsx");
-}
+searchBox.onkeyup=e=>{
+ let q=e.target.value.toLowerCase();
+ document.querySelectorAll(".card").forEach(c=>{
+  c.style.display=c.innerText.toLowerCase().includes(q)?"":"none";
+ });
+};
 
 /* Status */
-function checkStatuses() {
-  document.querySelectorAll(".card").forEach(card => {
-    const status = card.querySelector(".status-inline");
-    const url = card.dataset.url;
+function checkStatuses(){
+ document.querySelectorAll(".card").forEach(card=>{
+  let s=card.querySelector(".status-inline");
+  let url=card.dataset.url;
 
-    fetch(url, { method: "HEAD", mode: "no-cors" })
-      .then(() => {
-        status.textContent = "✓";
-        status.classList.add("ok");
-      })
-      .catch(() => {
-        status.textContent = "✖";
-        status.classList.add("fail");
-      });
+  fetch(url,{method:"HEAD",mode:"no-cors"})
+   .then(()=>{s.textContent="✓";s.classList.add("ok");})
+   .catch(()=>{s.textContent="✖";s.classList.add("fail");});
+ });
+}
+
+/* Excel */
+function exportToExcel(){
+ let data=[],headers=new Set();
+
+ document.querySelectorAll(".card").forEach(card=>{
+  if(card.style.display==="none")return;
+
+  let row={};
+  card.querySelectorAll(".field").forEach(f=>{
+    let k=f.querySelector(".label").innerText;
+    let v=f.querySelector(".value").innerText;
+    row[k]=v; headers.add(k);
   });
+
+  row["URL"]=card.dataset.url;
+  headers.add("URL");
+  data.push(row);
+ });
+
+ headers=[...headers];
+ let ws=XLSX.utils.aoa_to_sheet([
+  headers,
+  ...data.map(r=>headers.map(h=>r[h]||""))
+ ]);
+
+ let wb=XLSX.utils.book_new();
+ XLSX.utils.book_append_sheet(wb,ws,"Dashboard");
+ XLSX.writeFile(wb,"dashboard.xlsx");
 }
 
 /* Inactivity lock */
-let inactivityTimer;
-const INACTIVITY_LIMIT = 5 * 60 * 1000;
+let t; const LIMIT=300000;
 
-function resetInactivityTimer() {
-  clearTimeout(inactivityTimer);
-  inactivityTimer = setTimeout(() => {
-    document.getElementById("app").style.display = "none";
-    document.getElementById("auth").style.display = "flex";
-    document.getElementById("pwd").value = "";
-  }, INACTIVITY_LIMIT);
+function resetTimer(){
+ clearTimeout(t);
+ t=setTimeout(()=>{
+  app.style.display="none";
+  auth.style.display="flex";
+  pwd.value="";
+ },LIMIT);
 }
 
-["mousemove","keydown","scroll","click"].forEach(e=>{
-  document.addEventListener(e, resetInactivityTimer);
-});
+["mousemove","keydown","click","scroll"]
+.forEach(e=>document.addEventListener(e,resetTimer));
 
-function startInactivityTracking() {
-  resetInactivityTimer();
-}
-
+function startInactivityTracking(){resetTimer();}
 </script>
 
 </body>
