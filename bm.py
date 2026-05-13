@@ -230,6 +230,7 @@ Password<br>
 <div id="app" style="display:none;">
 
 <div class="topbar">
+Menu
 <input class="search" id="searchBox" placeholder="Search...">
 <div class="tools">
 <span id="themeToggle">🌙</span>
